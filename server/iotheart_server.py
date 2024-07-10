@@ -1,8 +1,8 @@
-import mysql.connector
 import logging
 import signal
 import sys
 
+import mysql.connector
 from bottle import Bottle, request, abort
 
 app = Bottle()
@@ -36,14 +36,18 @@ def add_heartbeat_to_db(device_id: str, mt, mu, mf, dt, du, df):
     db.close()
 
 
+def optional(value: object, fallback=0):
+    return value if (value != '' and value is not None) else fallback
+
+
 def receive_heartbeat():
     device_id: str = request.params.device_id
-    mem_total: int = request.params.mem_total
-    mem_used: int = request.params.mem_used
-    mem_free: int = request.params.mem_free
-    disk_total: int = request.params.disk_total
-    disk_used: int = request.params.disk_used
-    disk_free: int = request.params.disk_free
+    mem_total: int = optional(request.params.mem_total)
+    mem_used: int = optional(request.params.mem_used)
+    mem_free: int = optional(request.params.mem_free)
+    disk_total: int = optional(request.params.disk_total)
+    disk_used: int = optional(request.params.disk_used)
+    disk_free: int = optional(request.params.disk_free)
 
     if not device_id:
         abort(400, 'missing device_id')
@@ -60,7 +64,6 @@ def stop(sig=0, frame=None):
 # Register listeners for termination signals so the app can be gracefully stopped
 signal.signal(signal.SIGINT, stop)
 signal.signal(signal.SIGTERM, stop)
-
 
 try:
     app.route(path='/api/beat', method='POST', callback=receive_heartbeat)
