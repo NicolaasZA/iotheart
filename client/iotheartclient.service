@@ -5,7 +5,7 @@ After=network.target
 [Service]
 Type=simple
 Restart=always
-ExecStart=/usr/bin/python /home/klaus/iotheart_clientpy
+ExecStart=/usr/bin/python3 /home/klaus/iotheart_client.py
 
 [Install]
 WantedBy=multi-user.target
