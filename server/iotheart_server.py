@@ -9,7 +9,7 @@ app = Bottle()
 
 
 def connect_db():
-    return mysql.connector.connect(host="192.168.50.10", user="iotheart_server", database="iotheart", password="75#fGh3Xc&mf254")
+    return mysql.connector.connect(host="db_host", user="db_user", database="db_name", password="db_password")
 
 
 def add_heartbeat_to_db(device_id: str):
@@ -44,7 +44,7 @@ signal.signal(signal.SIGTERM, stop)
 
 try:
     app.route(path='/api/beat', method='POST', callback=receive_heartbeat)
-    app.run(port=1111)
+    app.run(host='0.0.0.0', port=1111)
 except Exception as exc:
     logging.getLogger().exception("Stopping app due to exception", exc_info=True)
     stop()
