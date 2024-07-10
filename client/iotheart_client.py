@@ -27,11 +27,14 @@ def send_heartbeat(*args, **kwargs):
         'disk_used': disk_info.used,
         'disk_free': disk_info.free,
     }
-    result = requests.post(url=beat_url, data=payload, timeout=beat_timeout).status_code
-    if result != 200:
-        print(f'Failed to send heartbeat. Response code is {result}')
-    else:
-        print('Heartbeat sent')
+    try:
+        result = requests.post(url=beat_url, data=payload, timeout=beat_timeout).status_code
+        if result != 200:
+            print(f'Failed to send heartbeat. Response code is {result}')
+        else:
+            print('Heartbeat sent')
+    except Exception as exc:
+        print(f'Failed to send heartbeat: {exc}')
 
 
 # Set a timer
