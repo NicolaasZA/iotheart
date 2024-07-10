@@ -1,0 +1,11 @@
+[Unit]
+Description=IOTHEART Client
+After=network.target
+
+[Service]
+Type=simple
+Restart=always
+ExecStart=/usr/bin/python /home/klaus/iotheart_clientpy
+
+[Install]
+WantedBy=multi-user.target
